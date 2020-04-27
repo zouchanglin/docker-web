@@ -1,0 +1,26 @@
+spring:
+  freemarker:
+    template-loader-path: classpath:/templates
+    cache: false
+    charset: UTF-8
+    check-template-location: true
+    content-type: text/html
+    expose-request-attributes: false
+    expose-session-attributes: false
+    request-context-attribute: request
+    suffix: .ftl
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+      url: jdbc:h2:mem:docker-web
+      driver-class-name: org.h2.Driver
+      schema: classpath:db/docker-web.sql
+      platform: h2
+  h2:
+    console:
+      enabled: true
+      path: /h2
+      settings:
+        web-allow-others: true
