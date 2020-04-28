@@ -27,10 +27,10 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">镜像管理<strong class="caret"></strong></a>
                 <ul class="dropdown-menu">
                     <li>
-                        <a href="#">镜像列表</a>
+                        <a href="/images/list">镜像列表</a>
                     </li>
                     <li>
-                        <a href="#">搜索镜像</a>
+                        <a href="/images/search-page">搜索镜像</a>
                     </li>
                 </ul>
             </li>
