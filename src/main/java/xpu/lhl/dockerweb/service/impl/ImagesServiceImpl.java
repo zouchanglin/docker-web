@@ -5,9 +5,11 @@ import com.spotify.docker.client.exceptions.DockerException;
 import com.spotify.docker.client.messages.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import xpu.lhl.dockerweb.config.RepositoryConfig;
 import xpu.lhl.dockerweb.form.BuildImageForm;
-import xpu.lhl.dockerweb.service.DockerClientPool;
+import xpu.lhl.dockerweb.service.DockerOperation;
 import xpu.lhl.dockerweb.service.ImagesService;
 import xpu.lhl.dockerweb.utils.MyDateFormat;
 import xpu.lhl.dockerweb.utils.ZipUtil;
@@ -28,9 +30,15 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class ImagesServiceImpl implements ImagesService {
+    @Autowired
+    private DockerOperation dockerOperation;
+
+    @Autowired
+    private RepositoryConfig repositoryConfig;
+
     @Override
     public List<ImageVO> getAllImages() {
-        DockerClient client = DockerClientPool.getClient();
+        DockerClient client = dockerOperation.getClient();
         try {
             return convertImageVOList(client.listImages(DockerClient.ListImagesParam.allImages(false)));
         } catch (DockerException | InterruptedException e) {
@@ -41,7 +49,7 @@ public class ImagesServiceImpl implements ImagesService {
 
     @Override
     public boolean removeImage(String imageId) {
-        DockerClient client = DockerClientPool.getClient();
+        DockerClient client = dockerOperation.getClient();
         try {
             List<RemovedImage> removedImageList = client.removeImage(imageId);
             return !removedImageList.isEmpty();
@@ -53,7 +61,7 @@ public class ImagesServiceImpl implements ImagesService {
 
     @Override
     public List<SearchImageVO> searchImages(String key) {
-        DockerClient client = DockerClientPool.getClient();
+        DockerClient client = dockerOperation.getClient();
         try {
             return convertSearchImageVOList(client.searchImages(key));
         } catch (InterruptedException | DockerException e) {
@@ -64,7 +72,7 @@ public class ImagesServiceImpl implements ImagesService {
 
     @Override
     public String buildImage(File file, BuildImageForm buildImageForm) {
-        DockerClient client = DockerClientPool.getClient();
+        DockerClient client = dockerOperation.getClient();
         final AtomicReference<String> imageIdFromMessage = new AtomicReference<>();
         try {
             File myTmpDir = new File(FileUtils.getTempDirectory(), "docker-web-build");
@@ -92,8 +100,29 @@ public class ImagesServiceImpl implements ImagesService {
         return "";
     }
 
+    @Override
+    public boolean pushImage(String imageName) {
+        DockerClient client = dockerOperation.getClient();
+        try {
+            if(!imageName.startsWith(repositoryConfig.getServerAddress())){
+                //打新的Tag
+                String newImageName = imageName.split("/")[1];
+                String tagName = String.format("%s/%s/%s", repositoryConfig.getServerAddress(), repositoryConfig.getNamespace(), newImageName);
+                client.tag(imageName, tagName);
+                client.push(tagName, dockerOperation.getRegistryAuth());
+                client.removeImage(tagName);
+                return true;
+            }
+            client.push(imageName, dockerOperation.getRegistryAuth());
+            return true;
+        } catch (DockerException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public ImageDetailVO inspectImageInfo(String imageId){
-        DockerClient client = DockerClientPool.getClient();
+        DockerClient client = dockerOperation.getClient();
         try {
             ImageInfo imageInfo = client.inspectImage(imageId);
             ImageDetailVO detailVO = new ImageDetailVO();
@@ -107,6 +136,18 @@ public class ImagesServiceImpl implements ImagesService {
         return null;
     }
 
+    @Override
+    public boolean pullImage(String imageName) {
+        DockerClient client = dockerOperation.getClient();
+        try {
+            client.pull(imageName+":latest");
+            return true;
+        } catch (DockerException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     private SearchImageVO convertSearchImageVO(ImageSearchResult result){
         SearchImageVO searchImageVO = new SearchImageVO();
         searchImageVO.setStars(result.starCount());
@@ -114,7 +155,6 @@ public class ImagesServiceImpl implements ImagesService {
         searchImageVO.setName(result.name());
         searchImageVO.setDescription(result.description());
         searchImageVO.setAutomated(String.valueOf(result.automated()));
-        //BeanUtils.copyProperties(result, searchImageVO);
         return searchImageVO;
     }
 

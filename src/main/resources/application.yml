@@ -29,3 +29,13 @@ spring:
       path: /h2
       settings:
         web-allow-others: true
+repository:
+  serverAddress: registry.cn-hangzhou.aliyuncs.com
+  userName: 15291418231
+  password: lhl123456an+
+  email: 15291418231@163.com
+  namespace: zouchanglin
+
+docker:
+  docker-ip: 192.168.0.106
+  docker-port: 2375

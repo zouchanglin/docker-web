@@ -45,4 +45,19 @@ public interface ImagesService {
      * @return 构建完成后的新镜像Id
      */
     String buildImage(File file, BuildImageForm buildImageForm);
+
+    /**
+     * 推送镜像至云镜像仓库
+     * @param imageName 镜像名称
+     * @return 是否推送成功
+     */
+    boolean pushImage(String imageName);
+
+
+    /**
+     * 通过镜像名称下载镜像
+     * @param imageName 镜像名称
+     * @return 下载是否成功
+     */
+    boolean pullImage(String imageName);
 }

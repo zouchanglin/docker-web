@@ -101,4 +101,30 @@ public class ImageController {
     public ModelAndView getBuildImagePage(){
         return new ModelAndView("virtual/images/build");
     }
+
+    // 推送镜像至云仓库
+    @GetMapping("push")
+    public ModelAndView pushImage(String imageId, Map<String, Object> map){
+        map.put("url", "/images/list");
+        if(imagesService.pushImage(imageId)){
+            map.put("msg", "Push Image Success!");
+            return new ModelAndView("common/success");
+        }else{
+            map.put("msg", "Push Image Error!");
+            return new ModelAndView("common/error");
+        }
+    }
+
+    // 从仓库拉取镜像
+    @GetMapping("pull")
+    public ModelAndView pullImage(String imageName, Map<String, String> map){
+        map.put("url", "/images/list");
+        if(imagesService.pullImage(imageName)){
+            map.put("msg", "Pull image success!");
+            return new ModelAndView("common/success", map);
+        }else{
+            map.put("msg", "Pull image failed!");
+            return new ModelAndView("common/error", map);
+        }
+    }
 }

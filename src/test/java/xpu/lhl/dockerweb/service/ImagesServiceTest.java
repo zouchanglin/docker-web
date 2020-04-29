@@ -40,4 +40,9 @@ public class ImagesServiceTest {
     public void inspectImageInfo(){
         imagesService.inspectImageInfo("f965319e89de");
     }
+
+    @Test
+    public void pullImage(){
+        imagesService.pullImage("docker.io/hello-world");
+    }
 }

@@ -66,7 +66,7 @@
                             ${searchImage.automated !}
                         </td>
                         <td>
-                            <button type="button" class="btn btn-default btn-success">Download</button>
+                            <a type="button" href="/images/pull?imageName=${searchImage.name}" class="btn btn-default btn-success">Download</a>
                         </td>
                     </tr>
                 </#list>
