@@ -2,24 +2,27 @@ package xpu.lhl.dockerweb.service.impl;
 
 import com.spotify.docker.client.DockerClient;
 import com.spotify.docker.client.exceptions.DockerException;
-import com.spotify.docker.client.messages.Image;
-import com.spotify.docker.client.messages.ImageInfo;
-import com.spotify.docker.client.messages.ImageSearchResult;
-import com.spotify.docker.client.messages.RemovedImage;
+import com.spotify.docker.client.messages.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
+import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Service;
+import xpu.lhl.dockerweb.form.BuildImageForm;
 import xpu.lhl.dockerweb.service.DockerClientPool;
 import xpu.lhl.dockerweb.service.ImagesService;
 import xpu.lhl.dockerweb.utils.MyDateFormat;
+import xpu.lhl.dockerweb.utils.ZipUtil;
 import xpu.lhl.dockerweb.vo.ImageDetailVO;
 import xpu.lhl.dockerweb.vo.ImageVO;
 import xpu.lhl.dockerweb.vo.SearchImageVO;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -29,7 +32,7 @@ public class ImagesServiceImpl implements ImagesService {
     public List<ImageVO> getAllImages() {
         DockerClient client = DockerClientPool.getClient();
         try {
-            return convertImageVOList(client.listImages(DockerClient.ListImagesParam.allImages()));
+            return convertImageVOList(client.listImages(DockerClient.ListImagesParam.allImages(false)));
         } catch (DockerException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -57,6 +60,36 @@ public class ImagesServiceImpl implements ImagesService {
             log.error("【ImagesServiceImpl】searchImages", e);
         }
         return new ArrayList<>();
+    }
+
+    @Override
+    public String buildImage(File file, BuildImageForm buildImageForm) {
+        DockerClient client = DockerClientPool.getClient();
+        final AtomicReference<String> imageIdFromMessage = new AtomicReference<>();
+        try {
+            File myTmpDir = new File(FileUtils.getTempDirectory(), "docker-web-build");
+            if(myTmpDir.exists()){
+                boolean deleteResult = myTmpDir.delete();
+                log.info("【ImagesServiceImpl】buildImage deleteResult = {}", deleteResult);
+            }
+            boolean mkdirResult = myTmpDir.mkdir();
+            log.info("【ImagesServiceImpl】buildImage mkdirResult = {}", mkdirResult);
+            String zipFilePath = file.getAbsolutePath();
+            //解压文件并且去除.zip后缀名 //C:\Users\15291\Desktop\build.zip -> C:\Users\15291\Desktop\build
+            ZipUtil.decompress(zipFilePath.substring(0, zipFilePath.length() - 4), myTmpDir.getPath());
+            String buildImageId = client.build(
+                    Paths.get(myTmpDir.getPath()), message -> {
+                        final String imageId = message.buildImageId();
+                        if (imageId != null) {
+                            imageIdFromMessage.set(imageId);
+                        }
+                    });
+            client.tag(buildImageId, String.format("%s:%s", buildImageForm.getRepository(), buildImageForm.getTag()));
+            return buildImageId;
+        } catch (DockerException | InterruptedException | IOException e) {
+            log.error("【ImagesServiceImpl】buildImage", e);
+        }
+        return "";
     }
 
     public ImageDetailVO inspectImageInfo(String imageId){

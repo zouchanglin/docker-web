@@ -30,6 +30,9 @@
                         <a href="/images/list">镜像列表</a>
                     </li>
                     <li>
+                        <a href="/images/build-page">通过DockerFile构建</a>
+                    </li>
+                    <li>
                         <a href="/images/search-page">搜索镜像</a>
                     </li>
                 </ul>

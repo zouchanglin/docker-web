@@ -1,18 +1,27 @@
 package xpu.lhl.dockerweb.controller;
 
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import xpu.lhl.dockerweb.form.BuildImageForm;
 import xpu.lhl.dockerweb.service.ImagesService;
 import xpu.lhl.dockerweb.vo.ImageDetailVO;
 import xpu.lhl.dockerweb.vo.ImageVO;
 import xpu.lhl.dockerweb.vo.SearchImageVO;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Controller
 @RequestMapping("/images")
 public class ImageController {
@@ -46,6 +55,7 @@ public class ImageController {
         return new ModelAndView("virtual/images/search");
     }
 
+    // 执行搜索镜像
     @GetMapping("search")
     public ModelAndView searchImages(String key, Map<String, Object> map){
         List<SearchImageVO> searchImageVOList = imagesService.searchImages(key);
@@ -53,10 +63,42 @@ public class ImageController {
         return new ModelAndView("virtual/images/search", map);
     }
 
+    // 查看镜像的详细信息
     @GetMapping("inspect")
     public ModelAndView inspectImageInfo(String imageId, Map<String, Object> map){
         ImageDetailVO imageInfo = imagesService.inspectImageInfo(imageId);
         map.put("imageDetailInfo", imageInfo);
         return new ModelAndView("virtual/images/detail", map);
+    }
+
+    // DockerFile上传并构建镜像
+    @PostMapping("build")
+    public ModelAndView buildImage(@RequestParam("file") MultipartFile file,
+                                   BuildImageForm buildImageForm,
+                                   Map<String, Object> map){
+        File directory = FileUtils.getTempDirectory();
+        File destFile = new File(directory, "tmp.zip");
+        if(destFile.exists()) {
+            boolean delete = destFile.delete();
+            log.info("【ImageController】buildImage tmp.zip delete result: {}", delete);
+        }
+        try {
+            file.transferTo(destFile);
+        } catch (IOException e) {
+            log.error("【ImageController】buildImage", e);
+            map.put("msg", "Build Failed");
+            map.put("url", "/images/list");
+            return new ModelAndView("common/error");
+        }
+        String newImageId = imagesService.buildImage(destFile, buildImageForm);
+        map.put("msg", "Build new image success, This image's id is " + newImageId);
+        map.put("url", "/images/list");
+        return new ModelAndView("common/success");
+    }
+
+    // 获得构建镜像的页面
+    @GetMapping("build-page")
+    public ModelAndView getBuildImagePage(){
+        return new ModelAndView("virtual/images/build");
     }
 }
