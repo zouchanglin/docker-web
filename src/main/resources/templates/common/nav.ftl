@@ -43,6 +43,7 @@
                     <li>
                         <a href="/container/list">容器列表</a>
                     </li>
+                    <li class="divider">
                     <li>
                         <a href="/container/status/create">已创建</a>
                     </li>
