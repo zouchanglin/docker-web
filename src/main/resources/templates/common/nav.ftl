@@ -41,19 +41,22 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">容器管理<strong class="caret"></strong></a>
                 <ul class="dropdown-menu">
                     <li>
-                        <a href="#">容器列表</a>
+                        <a href="/container/list">容器列表</a>
                     </li>
                     <li>
-                        <a href="#">运行中</a>
+                        <a href="/container/status/create">已创建</a>
                     </li>
                     <li>
-                        <a href="#">已停止</a>
+                        <a href="/container/status/running">运行中</a>
                     </li>
                     <li>
-                        <a href="#">创建容器</a>
+                        <a href="/container/status/paused">已暂停</a>
                     </li>
                     <li>
-                        <a href="#">监控报表</a>
+                        <a href="/container/status/restarting">重启中</a>
+                    </li>
+                    <li>
+                        <a href="/container/status/exited">已退出</a>
                     </li>
                 </ul>
             </li>
