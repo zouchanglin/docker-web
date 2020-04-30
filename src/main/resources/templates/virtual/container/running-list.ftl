@@ -80,8 +80,8 @@
                             ${container.names}
                         </td>
                         <td>
-                            <a  href="/container/pause?containerId=${container.containerId}" type="button" class="btn btn-warning">暂停</a>
-                            <a href="/container/stop?containerId=${container.containerId}" type="button" class="btn btn-danger">停止</a>
+                            <a href="/container/pause?containerId=${container.containerId}" type="button" class="btn btn-sm btn-warning">暂停</a>
+                            <a href="/container/stop?containerId=${container.containerId}" type="button" class="btn btn-sm btn-danger">停止</a>
                         </td>
                     </tr>
                 </#list>

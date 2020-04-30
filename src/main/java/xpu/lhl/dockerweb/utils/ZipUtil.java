@@ -209,8 +209,4 @@ public class ZipUtil {
             e.printStackTrace();
         }
     }
-
-    public static void main(String[] args) {
-        decompress("C:\\Users\\15291\\Desktop\\build.zip", "C:\\Users\\15291\\Desktop\\build");
-    }
 }

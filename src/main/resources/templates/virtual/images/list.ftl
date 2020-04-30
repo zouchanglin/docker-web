@@ -56,8 +56,8 @@
                             ${image.size} M
                         </td>
                         <td>
-                            <a type="button" class="btn btn-sm btn-default btn-info" href="/images/inspect?imageId=${image.imageId}">详情</a>
-                            <a type="button" class="btn btn-sm btn-default btn-danger" href="/images/remove?imageId=${image.imageId}">删除</a>
+                            <a type="button" class="btn btn-sm btn-info" href="/images/inspect?imageId=${image.imageId}">详情</a>
+                            <a type="button" class="btn btn-sm btn-danger" href="/images/remove?imageId=${image.imageId}">删除</a>
                             <a type="button" class="btn btn-sm btn-default" href="/images/push?imageId=${image.repository}:${image.tag}">推送</a>
                         </td>
                     </tr>

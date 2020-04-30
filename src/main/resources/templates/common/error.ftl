@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="container">
-    <div class="row clearfix">
+    <div class="row clearfix" style="padding-top: 10px">
         <div class="col-md-12 column">
             <div class="alert alert-dismissable alert-danger">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
