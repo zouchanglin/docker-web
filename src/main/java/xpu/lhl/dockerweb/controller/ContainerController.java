@@ -5,8 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import xpu.lhl.dockerweb.form.CreateContainerForm;
 import xpu.lhl.dockerweb.service.ContainerService;
 import xpu.lhl.dockerweb.vo.ContainerVO;
 
@@ -82,5 +84,32 @@ public class ContainerController {
             map.put("msg", "Stop this container failed!");
             return new ModelAndView("common/error");
         }
+    }
+
+    @GetMapping("remove")
+    public ModelAndView removeContainerById(String containerId, Map<String, String> map){
+        map.put("url", "/container/status/running");
+        if(containerService.removeContainer(containerId)){
+            map.put("msg", "Stop this container success!");
+            return new ModelAndView("common/success");
+        }else{
+            map.put("msg", "Stop this container failed!");
+            return new ModelAndView("common/error");
+        }
+    }
+
+    @PostMapping("create")
+    public ModelAndView createContainer(CreateContainerForm createContainerForm,
+                                        Map<String, String> map){
+        log.info("【ContainerController】createContainer createContainerForm = {}", createContainerForm);
+        map.put("url", "/container/status/created");
+        map.put("msg", "success");
+        return new ModelAndView("common/success");
+    }
+
+    @GetMapping("create-page")
+    public ModelAndView getCreateContainerPage(String imageId, Map<String, String> map){
+        map.put("imageId", imageId);
+        return new ModelAndView("virtual/container/create");
     }
 }

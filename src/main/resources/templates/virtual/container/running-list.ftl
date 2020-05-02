@@ -44,6 +44,9 @@
                     <th>
 
                     </th>
+                    <th>
+
+                    </th>
                 </tr>
                 </thead>
                 <tbody>
@@ -81,6 +84,8 @@
                         </td>
                         <td>
                             <a href="/container/pause?containerId=${container.containerId}" type="button" class="btn btn-sm btn-warning">暂停</a>
+                        </td>
+                        <td>
                             <a href="/container/stop?containerId=${container.containerId}" type="button" class="btn btn-sm btn-danger">停止</a>
                         </td>
                     </tr>

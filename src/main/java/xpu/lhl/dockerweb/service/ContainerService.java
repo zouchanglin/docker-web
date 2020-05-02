@@ -25,9 +25,36 @@ public interface ContainerService {
      */
     boolean startContainer(String containerId);
 
+    /**
+     * 暂停容器
+     * @param containerId 容器Id
+     * @return 操作是否成功
+     */
     boolean pauseContainer(String containerId);
 
+    /**
+     * 停止容器
+     * @param containerId 容器Id
+     * @return 操作是否成功
+     */
     boolean stopContainer(String containerId);
 
+    /**
+     * 解除暂停容器
+     * @param containerId 容器Id
+     * @return 操作是否成功
+     */
     boolean unpauseContainer(String containerId);
+
+    /**
+     * 移除容器
+     * @param containerId 容器Id
+     * @return 操作是否成功
+     */
+    boolean removeContainer(String containerId);
+
+    /**
+     * 创建容器
+     */
+    void createContainer();
 }

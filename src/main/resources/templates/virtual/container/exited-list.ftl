@@ -81,6 +81,7 @@
                         </td>
                         <td>
                             <a href="/container/start?containerId=${container.containerId}" type="button" class="btn btn-sm btn-default btn-success">启动</a>
+                            <a href="/container/remove?containerId=${container.containerId}" type="button" class="btn btn-sm btn-danger">删除</a>
                         </td>
                     </tr>
                 </#list>

@@ -59,6 +59,7 @@
                             <a type="button" class="btn btn-sm btn-info" href="/images/inspect?imageId=${image.imageId}">详情</a>
                             <a type="button" class="btn btn-sm btn-danger" href="/images/remove?imageId=${image.imageId}">删除</a>
                             <a type="button" class="btn btn-sm btn-default" href="/images/push?imageId=${image.repository}:${image.tag}">推送</a>
+                            <a type="button" class="btn btn-sm btn-default" href="/container/create-page?imageId=${image.repository}:${image.tag}">创建容器</a>
                         </td>
                     </tr>
                 </#list>

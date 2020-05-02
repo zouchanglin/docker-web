@@ -1,28 +1,30 @@
 package xpu.lhl.dockerweb.service.impl;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.spotify.docker.client.DockerClient;
 import com.spotify.docker.client.exceptions.DockerException;
-import com.spotify.docker.client.messages.Container;
+import com.spotify.docker.client.messages.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.hibernate.mapping.Map;
 import org.springframework.stereotype.Service;
+import xpu.lhl.dockerweb.enums.CPUSharesEnum;
 import xpu.lhl.dockerweb.service.ContainerService;
 import xpu.lhl.dockerweb.service.DockerOperation;
 import xpu.lhl.dockerweb.utils.MyDateFormat;
 import xpu.lhl.dockerweb.vo.ContainerVO;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class ContainerServiceImpl implements ContainerService {
-    @Autowired
-    private DockerOperation dockerOperation;
+    private final DockerOperation dockerOperation;
+
+    public ContainerServiceImpl(DockerOperation dockerOperation) {
+        this.dockerOperation = dockerOperation;
+    }
 
     @Override
     public List<ContainerVO> getAllContainer() {
@@ -116,12 +118,52 @@ public class ContainerServiceImpl implements ContainerService {
         return false;
     }
 
+    @Override
+    public boolean removeContainer(String containerId){
+        DockerClient client = dockerOperation.getClient();
+        try {
+            client.removeContainer(containerId);
+            return true;
+        } catch (DockerException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public void createContainer() {
+        DockerClient client = dockerOperation.getClient();
+
+        java.util.Map<String, List<PortBinding>> portBindings = new HashMap<>();
+        portBindings.put("3306", Collections.singletonList(PortBinding.of("0.0.0.0", "3307")));
+        HashMap<String, String> storageMForm = new HashMap<>();
+        storageMForm.put("size", "120G");
+        HostConfig hostConfig = HostConfig.builder()
+                .portBindings(portBindings)
+                .privileged(true)
+                .appendBinds("/root/tim:/root/lhl")
+                .cpuShares(CPUSharesEnum.A.getValue())
+                .memory(1024 * 1024 * 1024L)
+                .storageOpt(storageMForm)
+                .build();
+        ContainerConfig containerConfig = ContainerConfig.builder()
+                .hostConfig(hostConfig)
+                .image("mysql:5.7")
+                .env("MYSQL_ROOT_PASSWORD=123456")
+                .exposedPorts("3306")
+                .build();
+        try {
+            client.createContainer(containerConfig, "mysql5.7.v1");
+        } catch (DockerException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     private List<ContainerVO> convertContainerVOList(List<Container> containerList){
         return containerList.stream().map(this::convertContainerVO).collect(Collectors.toList());
     }
 
     private ContainerVO convertContainerVO(Container container){
-        log.info("【ContainerServiceImpl】convertContainerVO container={}", container);
         ContainerVO containerVO = new ContainerVO();
         containerVO.setContainerId(container.id().substring(0, 12));
         containerVO.setImage(container.image());
