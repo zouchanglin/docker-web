@@ -102,9 +102,15 @@ public class ContainerController {
     public ModelAndView createContainer(CreateContainerForm createContainerForm,
                                         Map<String, String> map){
         log.info("【ContainerController】createContainer createContainerForm = {}", createContainerForm);
-        map.put("url", "/container/status/created");
-        map.put("msg", "success");
-        return new ModelAndView("common/success");
+        String containerId = containerService.createContainer(createContainerForm);
+        map.put("url", "/container/status/create");
+        if(containerId != null){
+            map.put("msg", "创建容器成功，容器Id为 " + containerId);
+            return new ModelAndView("common/success");
+        }else{
+            map.put("msg", "创建容器失败");
+            return new ModelAndView("common/error");
+        }
     }
 
     @GetMapping("create-page")

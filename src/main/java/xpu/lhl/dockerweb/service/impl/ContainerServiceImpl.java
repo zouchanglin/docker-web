@@ -8,7 +8,9 @@ import com.spotify.docker.client.messages.*;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.mapping.Map;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import xpu.lhl.dockerweb.enums.CPUSharesEnum;
+import xpu.lhl.dockerweb.form.CreateContainerForm;
 import xpu.lhl.dockerweb.service.ContainerService;
 import xpu.lhl.dockerweb.service.DockerOperation;
 import xpu.lhl.dockerweb.utils.MyDateFormat;
@@ -131,32 +133,51 @@ public class ContainerServiceImpl implements ContainerService {
     }
 
     @Override
-    public void createContainer() {
+    public String createContainer(CreateContainerForm createContainerForm) {
+        if(StringUtils.isEmpty(createContainerForm.getEnvK()) ||
+                StringUtils.isEmpty(createContainerForm.getEnvV())){
+            createContainerForm.setEnvK("TEST");
+            createContainerForm.setEnvV("TEST");
+        }
+        if(createContainerForm.getContainerPath() == null || createContainerForm.getHostPath() == null){
+            createContainerForm.setContainerPath("/");
+            createContainerForm.setContainerPath("/");
+        }
         DockerClient client = dockerOperation.getClient();
-
+        Integer containerPort = createContainerForm.getContainerPort();
+        Integer hostPort = createContainerForm.getHostPort();
         java.util.Map<String, List<PortBinding>> portBindings = new HashMap<>();
-        portBindings.put("3306", Collections.singletonList(PortBinding.of("0.0.0.0", "3307")));
+        portBindings.put(String.valueOf(containerPort), Collections.singletonList(PortBinding.of("0.0.0.0", String.valueOf(hostPort))));
         HashMap<String, String> storageMForm = new HashMap<>();
-        storageMForm.put("size", "120G");
+        storageMForm.put("size", createContainerForm.getDiskSize() + "G");
         HostConfig hostConfig = HostConfig.builder()
                 .portBindings(portBindings)
                 .privileged(true)
-                .appendBinds("/root/tim:/root/lhl")
+                //.appendBinds("/root/tim:/root/lhl")
+                .appendBinds(createContainerForm.getHostPath()+":"+createContainerForm.getContainerPath())
                 .cpuShares(CPUSharesEnum.A.getValue())
-                .memory(1024 * 1024 * 1024L)
-                .storageOpt(storageMForm)
+                .memory((long)(createContainerForm.getMemorySize() * 1024.0 * 1024.0 * 1024.0))
+                //.storageOpt(storageMForm)
                 .build();
+
         ContainerConfig containerConfig = ContainerConfig.builder()
                 .hostConfig(hostConfig)
-                .image("mysql:5.7")
-                .env("MYSQL_ROOT_PASSWORD=123456")
-                .exposedPorts("3306")
+                //.image("mysql:5.7")
+                .image(createContainerForm.getImage())
+                //.env("MYSQL_ROOT_PASSWORD=123456")
+
+                .env(createContainerForm.getEnvK() + "=" + createContainerForm.getEnvV())
+                //.exposedPorts("3306")
+                .exposedPorts(String.valueOf(containerPort))
                 .build();
         try {
-            client.createContainer(containerConfig, "mysql5.7.v1");
+            ContainerCreation containerCreation = client.createContainer(containerConfig,
+                    createContainerForm.getContainerName());
+            return containerCreation.id();
         } catch (DockerException | InterruptedException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     private List<ContainerVO> convertContainerVOList(List<Container> containerList){

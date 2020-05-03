@@ -8,10 +8,21 @@
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div class="container">
+<div class="container-fiuled">
     <#--边栏sidebar-->
     <#include "../../common/nav.ftl">
-    <h1>重启中容器列表</h1>
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <ul class="breadcrumb">
+                <li>
+                    <a href="/container/list">容器管理</a>
+                </li>
+                <li class="active">
+                    重启中容器
+                </li>
+            </ul>
+        </div>
+    </div>
     <div class="row clearfix">
         <div class="col-md-12 column">
             <table class="table">

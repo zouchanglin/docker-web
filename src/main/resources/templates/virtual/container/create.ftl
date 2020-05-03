@@ -8,17 +8,28 @@
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div class="container">
+<div class="container-fiuled">
     <#--边栏sidebar-->
     <#include "../../common/nav.ftl">
-    <h1>创建容器</h1>
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <ul class="breadcrumb">
+                <li>
+                    <a href="/container/list">容器管理</a>
+                </li>
+                <li class="active">
+                    创建容器
+                </li>
+            </ul>
+        </div>
+    </div>
     <div class="row clearfix">
         <div class="col-md-12 column">
             <form class="form-horizontal" role="form" action="/container/create" method="post">
                 <div class="form-group">
                     <label for="inputPassword3" class="col-sm-2 control-label">源镜像</label>
                     <div class="col-sm-10">
-                        <input type="text" value="${imageId}" class="form-control" disabled="disabled" id="inputPassword3" name="image"/>
+                        <input type="text" value="${imageId}" readonly="readonly" class="form-control" id="inputPassword3" name="image"/>
                     </div>
                 </div>
                 <div class="form-group">
@@ -63,7 +74,7 @@
                 <div class="form-group">
                     <label for="inputPassword3" class="col-sm-2 control-label">内存限制</label>
                     <div class="col-sm-10">
-                        <input type="number" class="form-control" placeholder="以GB为单位，如4则表示4GB" id="inputPassword3" name="memorySize"/>
+                        <input type="number" class="form-control" step="0.1" placeholder="以GB为单位，如4则表示4GB" id="inputPassword3" name="memorySize"/>
                     </div>
                 </div>
                 <div class="form-group">
@@ -88,7 +99,7 @@
                 </div>
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-default">Sign in</button>
+                        <button type="submit" class="btn btn-default">创建容器</button>
                     </div>
                 </div>
             </form>

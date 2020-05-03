@@ -1,5 +1,6 @@
 package xpu.lhl.dockerweb.service;
 
+import xpu.lhl.dockerweb.form.CreateContainerForm;
 import xpu.lhl.dockerweb.vo.ContainerVO;
 
 import java.util.List;
@@ -56,5 +57,5 @@ public interface ContainerService {
     /**
      * 创建容器
      */
-    void createContainer();
+    String createContainer(CreateContainerForm createContainerForm);
 }
