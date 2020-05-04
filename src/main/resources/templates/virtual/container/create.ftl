@@ -8,7 +8,7 @@
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div class="container-fiuled">
+<div class="container">
     <#--边栏sidebar-->
     <#include "../../common/nav.ftl">
     <div class="row clearfix">
@@ -23,9 +23,10 @@
             </ul>
         </div>
     </div>
+
     <div class="row clearfix">
         <div class="col-md-12 column">
-            <form class="form-horizontal" role="form" action="/container/create" method="post">
+            <form class="form-horizontal" style="padding-right: 110px" role="form" action="/container/create" method="post">
                 <div class="form-group">
                     <label for="inputPassword3" class="col-sm-2 control-label">源镜像</label>
                     <div class="col-sm-10">

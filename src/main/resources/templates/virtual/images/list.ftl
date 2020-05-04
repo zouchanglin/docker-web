@@ -14,7 +14,7 @@
     <h1>本地镜像列表</h1>
     <div class="row clearfix">
         <div class="col-md-12 column">
-            <table class="table">
+            <table class="table table-bordered">
                 <thead>
                 <tr>
                     <th>

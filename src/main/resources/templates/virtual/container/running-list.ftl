@@ -8,7 +8,7 @@
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div class="container-fiuled">
+<div class="container">
     <#--边栏sidebar-->
     <#include "../../common/nav.ftl">
     <div class="row clearfix">
@@ -25,7 +25,7 @@
     </div>
     <div class="row clearfix">
         <div class="col-md-12 column">
-            <table class="table">
+            <table class="table table-bordered">
                 <thead>
                 <tr>
                     <th>
@@ -51,9 +51,6 @@
                     </th>
                     <th>
                         NAMES
-                    </th>
-                    <th>
-
                     </th>
                     <th>
 
@@ -95,9 +92,8 @@
                         </td>
                         <td>
                             <a href="/container/pause?containerId=${container.containerId}" type="button" class="btn btn-sm btn-warning">暂停</a>
-                        </td>
-                        <td>
                             <a href="/container/stop?containerId=${container.containerId}" type="button" class="btn btn-sm btn-danger">停止</a>
+                            <a href="/container/restart?containerId=${container.containerId}" type="button" class="btn btn-sm btn-default">重启</a>
                         </td>
                     </tr>
                 </#list>

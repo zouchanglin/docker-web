@@ -1,12 +1,10 @@
 package xpu.lhl.dockerweb.service.impl;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.spotify.docker.client.DockerClient;
 import com.spotify.docker.client.exceptions.DockerException;
 import com.spotify.docker.client.messages.*;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.mapping.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import xpu.lhl.dockerweb.enums.CPUSharesEnum;
@@ -134,50 +132,64 @@ public class ContainerServiceImpl implements ContainerService {
 
     @Override
     public String createContainer(CreateContainerForm createContainerForm) {
-        if(StringUtils.isEmpty(createContainerForm.getEnvK()) ||
-                StringUtils.isEmpty(createContainerForm.getEnvV())){
-            createContainerForm.setEnvK("TEST");
-            createContainerForm.setEnvV("TEST");
-        }
-        if(createContainerForm.getContainerPath() == null || createContainerForm.getHostPath() == null){
-            createContainerForm.setContainerPath("/");
-            createContainerForm.setContainerPath("/");
-        }
         DockerClient client = dockerOperation.getClient();
+
         Integer containerPort = createContainerForm.getContainerPort();
         Integer hostPort = createContainerForm.getHostPort();
-        java.util.Map<String, List<PortBinding>> portBindings = new HashMap<>();
+        Map<String, List<PortBinding>> portBindings = new HashMap<>();
         portBindings.put(String.valueOf(containerPort), Collections.singletonList(PortBinding.of("0.0.0.0", String.valueOf(hostPort))));
-        HashMap<String, String> storageMForm = new HashMap<>();
-        storageMForm.put("size", createContainerForm.getDiskSize() + "G");
+
         HostConfig hostConfig = HostConfig.builder()
                 .portBindings(portBindings)
-                .privileged(true)
-                //.appendBinds("/root/tim:/root/lhl")
-                .appendBinds(createContainerForm.getHostPath()+":"+createContainerForm.getContainerPath())
                 .cpuShares(CPUSharesEnum.A.getValue())
-                .memory((long)(createContainerForm.getMemorySize() * 1024.0 * 1024.0 * 1024.0))
-                //.storageOpt(storageMForm)
+                .memory((long)(createContainerForm.getMemorySize() * 1024 * 1024 * 1024))
+                .privileged(true)
                 .build();
+        // 判断是否存在容器数据卷
+        String containerPath = createContainerForm.getContainerPath();
+        String hostPath = createContainerForm.getHostPath();
+        if(!StringUtils.isEmpty(containerPath) && !StringUtils.isEmpty(hostPath)){
+            hostConfig = hostConfig.toBuilder().appendBinds(hostPath + ":" + containerPath).build();
+        }
 
         ContainerConfig containerConfig = ContainerConfig.builder()
                 .hostConfig(hostConfig)
-                //.image("mysql:5.7")
                 .image(createContainerForm.getImage())
-                //.env("MYSQL_ROOT_PASSWORD=123456")
-
-                .env(createContainerForm.getEnvK() + "=" + createContainerForm.getEnvV())
-                //.exposedPorts("3306")
                 .exposedPorts(String.valueOf(containerPort))
                 .build();
+        // 判断是否存在环境变量
+        String envK = createContainerForm.getEnvK();
+        String envV = createContainerForm.getEnvV();
+        if(!StringUtils.isEmpty(envK) && !StringUtils.isEmpty(envV)){
+            containerConfig = containerConfig.toBuilder().env(envK + "=" + envV).build();
+        }
+
+
+
         try {
-            ContainerCreation containerCreation = client.createContainer(containerConfig,
-                    createContainerForm.getContainerName());
+            ContainerCreation containerCreation = client.createContainer(containerConfig, createContainerForm.getContainerName());
             return containerCreation.id();
         } catch (DockerException | InterruptedException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public void packageContainer(String containerId, String name) {
+        DockerClient dockerClient = dockerOperation.getClient();
+        //dockerClient.commitContainer();
+    }
+
+    @Override
+    public boolean restartContainer(String containerId) {
+        try {
+            dockerOperation.getClient().restartContainer(containerId);
+            return true;
+        } catch (DockerException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     private List<ContainerVO> convertContainerVOList(List<Container> containerList){

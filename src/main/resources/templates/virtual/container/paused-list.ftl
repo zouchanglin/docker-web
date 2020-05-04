@@ -8,7 +8,7 @@
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div class="container-fiuled">
+<div class="container">
     <#--边栏sidebar-->
     <#include "../../common/nav.ftl">
     <div class="row clearfix">
@@ -25,7 +25,7 @@
     </div>
     <div class="row clearfix">
         <div class="col-md-12 column">
-            <table class="table">
+            <table class="table table-bordered">
                 <thead>
                 <tr>
                     <th>

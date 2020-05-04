@@ -19,7 +19,8 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-      url: jdbc:h2:mem:docker-web
+      # url: jdbc:h2:mem:docker-web
+      url: jdbc:h2:file:./db/docker-web
       driver-class-name: org.h2.Driver
       schema: classpath:db/docker-web.sql
       platform: h2

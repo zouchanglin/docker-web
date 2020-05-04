@@ -118,4 +118,16 @@ public class ContainerController {
         map.put("imageId", imageId);
         return new ModelAndView("virtual/container/create");
     }
+
+    @GetMapping("restart")
+    public ModelAndView restartContainer(String containerId, Map<String, Object> map){
+        map.put("url", "/container/status/running");
+        if(containerService.restartContainer(containerId)){
+            map.put("msg", "Restart this container success!");
+            return new ModelAndView("common/success");
+        }else{
+            map.put("msg", "Restart this container failed!");
+            return new ModelAndView("common/error");
+        }
+    }
 }

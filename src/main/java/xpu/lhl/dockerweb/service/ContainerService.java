@@ -58,4 +58,14 @@ public interface ContainerService {
      * 创建容器
      */
     String createContainer(CreateContainerForm createContainerForm);
+
+    /**
+     * 重启容器
+     * @param containerId 容器Id
+     * @return 是否重启成功
+     */
+    boolean restartContainer(String containerId);
+
+
+    void packageContainer(String containerId, String name);
 }
