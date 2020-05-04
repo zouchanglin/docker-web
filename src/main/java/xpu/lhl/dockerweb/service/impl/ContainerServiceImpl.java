@@ -5,10 +5,15 @@ import com.spotify.docker.client.DockerClient;
 import com.spotify.docker.client.exceptions.DockerException;
 import com.spotify.docker.client.messages.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import xpu.lhl.dockerweb.config.RepositoryConfig;
 import xpu.lhl.dockerweb.enums.CPUSharesEnum;
+import xpu.lhl.dockerweb.form.ContainerCommitForm;
 import xpu.lhl.dockerweb.form.CreateContainerForm;
+import xpu.lhl.dockerweb.repository.ContainerConfigRepository;
 import xpu.lhl.dockerweb.service.ContainerService;
 import xpu.lhl.dockerweb.service.DockerOperation;
 import xpu.lhl.dockerweb.utils.MyDateFormat;
@@ -20,10 +25,16 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class ContainerServiceImpl implements ContainerService {
+    private final ContainerConfigRepository configRepository;
     private final DockerOperation dockerOperation;
+    private final RepositoryConfig repositoryConfig;
 
-    public ContainerServiceImpl(DockerOperation dockerOperation) {
+    public ContainerServiceImpl(DockerOperation dockerOperation,
+                                ContainerConfigRepository configRepository,
+                                RepositoryConfig repositoryConfig) {
         this.dockerOperation = dockerOperation;
+        this.configRepository = configRepository;
+        this.repositoryConfig = repositoryConfig;
     }
 
     @Override
@@ -123,6 +134,7 @@ public class ContainerServiceImpl implements ContainerService {
         DockerClient client = dockerOperation.getClient();
         try {
             client.removeContainer(containerId);
+            configRepository.deleteById(containerId);
             return true;
         } catch (DockerException | InterruptedException e) {
             e.printStackTrace();
@@ -133,7 +145,46 @@ public class ContainerServiceImpl implements ContainerService {
     @Override
     public String createContainer(CreateContainerForm createContainerForm) {
         DockerClient client = dockerOperation.getClient();
+        ContainerConfig containerConfig = generate(createContainerForm);
+        try {
+            ContainerCreation containerCreation = client.createContainer(containerConfig, createContainerForm.getContainerName());
+            xpu.lhl.dockerweb.entity.ContainerConfig config = new xpu.lhl.dockerweb.entity.ContainerConfig();
+            BeanUtils.copyProperties(createContainerForm, config);
+            config.setContainerId(containerCreation.id().substring(0, 12));
+            xpu.lhl.dockerweb.entity.ContainerConfig saveResult = configRepository.save(config);
+            log.info("【ContainerServiceImpl】 createContainer saveResult={}", saveResult);
+            return containerCreation.id();
+        } catch (DockerException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
+    @Override
+    public String commitContainer(ContainerCommitForm commitForm) {
+        DockerClient dockerClient = dockerOperation.getClient();
+        Optional<xpu.lhl.dockerweb.entity.ContainerConfig> containerConfigOpt = configRepository.findById(commitForm.getContainerId());
+        if(containerConfigOpt.isPresent()){
+            xpu.lhl.dockerweb.entity.ContainerConfig myContainerConfig = containerConfigOpt.get();
+            CreateContainerForm createContainerForm = new CreateContainerForm();
+            BeanUtils.copyProperties(myContainerConfig, createContainerForm);
+            ContainerConfig containerConfig = generate(createContainerForm);
+            try {
+                ContainerCreation commitContainer = dockerClient.commitContainer(commitForm.getContainerId(),
+                        commitForm.getRepo(),
+                        commitForm.getTag(),
+                        containerConfig,
+                        commitForm.getComment(),
+                        commitForm.getAuthor());
+                return commitContainer.id();
+            } catch (DockerException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    private ContainerConfig generate(CreateContainerForm createContainerForm) {
         Integer containerPort = createContainerForm.getContainerPort();
         Integer hostPort = createContainerForm.getHostPort();
         Map<String, List<PortBinding>> portBindings = new HashMap<>();
@@ -145,6 +196,7 @@ public class ContainerServiceImpl implements ContainerService {
                 .memory((long)(createContainerForm.getMemorySize() * 1024 * 1024 * 1024))
                 .privileged(true)
                 .build();
+
         // 判断是否存在容器数据卷
         String containerPath = createContainerForm.getContainerPath();
         String hostPath = createContainerForm.getHostPath();
@@ -152,11 +204,13 @@ public class ContainerServiceImpl implements ContainerService {
             hostConfig = hostConfig.toBuilder().appendBinds(hostPath + ":" + containerPath).build();
         }
 
+        // 这是个是容器的配置参数
         ContainerConfig containerConfig = ContainerConfig.builder()
                 .hostConfig(hostConfig)
                 .image(createContainerForm.getImage())
                 .exposedPorts(String.valueOf(containerPort))
                 .build();
+
         // 判断是否存在环境变量
         String envK = createContainerForm.getEnvK();
         String envV = createContainerForm.getEnvV();
@@ -164,21 +218,7 @@ public class ContainerServiceImpl implements ContainerService {
             containerConfig = containerConfig.toBuilder().env(envK + "=" + envV).build();
         }
 
-
-
-        try {
-            ContainerCreation containerCreation = client.createContainer(containerConfig, createContainerForm.getContainerName());
-            return containerCreation.id();
-        } catch (DockerException | InterruptedException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    public void packageContainer(String containerId, String name) {
-        DockerClient dockerClient = dockerOperation.getClient();
-        //dockerClient.commitContainer();
+        return containerConfig;
     }
 
     @Override
@@ -190,6 +230,36 @@ public class ContainerServiceImpl implements ContainerService {
             e.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public void killContainer(String containerId) {
+        DockerClient dockerClient = dockerOperation.getClient();
+        try {
+            dockerClient.stopContainer(containerId, 0);
+            dockerClient.removeContainer(containerId);
+            configRepository.deleteById(containerId);
+        } catch (DockerException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public Map<String, String> getRepositoryInfo(String containerId) {
+        HashMap<String, String> retHashMap = new HashMap<>();
+        Optional<xpu.lhl.dockerweb.entity.ContainerConfig> configOptional = configRepository.findById(containerId);
+        if(configOptional.isPresent()){
+            xpu.lhl.dockerweb.entity.ContainerConfig containerConfig = configOptional.get();
+            String containerName = containerConfig.getContainerName();
+            String serverAddress = repositoryConfig.getServerAddress();
+            String namespace = repositoryConfig.getNamespace();
+            retHashMap.put("containerId", containerId);
+            retHashMap.put("containerName", containerName);
+            retHashMap.put("serverAddress", serverAddress);
+            retHashMap.put("namespace", namespace);
+            retHashMap.put("author", repositoryConfig.getUserName() + ":" + repositoryConfig.getEmail());
+        }
+        return retHashMap;
     }
 
     private List<ContainerVO> convertContainerVOList(List<Container> containerList){

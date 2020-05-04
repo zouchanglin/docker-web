@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import xpu.lhl.dockerweb.form.ContainerCommitForm;
 import xpu.lhl.dockerweb.form.CreateContainerForm;
 import xpu.lhl.dockerweb.service.ContainerService;
 import xpu.lhl.dockerweb.vo.ContainerVO;
@@ -129,5 +130,38 @@ public class ContainerController {
             map.put("msg", "Restart this container failed!");
             return new ModelAndView("common/error");
         }
+    }
+
+    @GetMapping("commit-page")
+    public ModelAndView getCommitContainerPage(String containerId, Map<String, String> map){
+        map.put("containerId", containerId);
+        Map<String, String> resultParamMap = containerService.getRepositoryInfo(containerId);
+        map.put("containerId", containerId);
+        map.put("containerName", resultParamMap.get("containerName"));
+        map.put("serverAddress", resultParamMap.get("serverAddress"));
+        map.put("namespace", resultParamMap.get("namespace"));
+        map.put("author", resultParamMap.get("author"));
+        return new ModelAndView("virtual/container/commit", map);
+    }
+
+    @PostMapping("commit")
+    public ModelAndView commitContainer(ContainerCommitForm commitForm, Map<String, String> map){
+        String newImageId = containerService.commitContainer(commitForm);
+        map.put("url", "/images/list");
+        if(newImageId != null){
+            map.put("msg", "Container Commit Success!");
+            return new ModelAndView("common/success", map);
+        }else{
+            map.put("msg", "Container Commit Failed!");
+            return new ModelAndView("common/error", map);
+        }
+    }
+
+    @GetMapping("kill")
+    public ModelAndView killContainer(String containerId, Map<String, String> map){
+        map.put("url", "/container/list");
+        map.put("msg", "Kill Success");
+        containerService.killContainer(containerId);
+        return new ModelAndView("common/success", map);
     }
 }

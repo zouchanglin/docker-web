@@ -52,6 +52,9 @@
                     <th>
                         NAMES
                     </th>
+                    <th>
+
+                    </th>
                 </tr>
                 </thead>
                 <tbody>
@@ -86,6 +89,10 @@
                         </td>
                         <td>
                             ${container.names}
+                        </td>
+                        <td>
+                            <a href="/container/commit-page?containerId=${container.containerId}" type="button" class="btn btn-sm btn-default btn-success">提交</a>
+                            <a href="/container/kill?containerId=${container.containerId}" type="button" class="btn btn-sm btn-default btn-danger">Kill</a>
                         </td>
                     </tr>
                 </#list>
