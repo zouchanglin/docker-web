@@ -38,5 +38,5 @@ repository:
   namespace: zouchanglin
 
 docker:
-  docker-ip: 192.168.0.106
+  docker-ip: 192.168.2.2
   docker-port: 2375
