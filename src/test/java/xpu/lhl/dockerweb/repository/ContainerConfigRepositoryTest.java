@@ -13,7 +13,7 @@ import java.util.UUID;
 import static org.junit.Assert.*;
 
 @Slf4j
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringRunner.class)
 public class ContainerConfigRepositoryTest {
     @Autowired

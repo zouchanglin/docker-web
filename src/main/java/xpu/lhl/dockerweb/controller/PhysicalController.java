@@ -3,16 +3,25 @@ package xpu.lhl.dockerweb.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import xpu.lhl.dockerweb.config.ProjectConfig;
+import xpu.lhl.dockerweb.service.MonitorService;
 import xpu.lhl.dockerweb.utils.PhysicalFacilityUtil;
 import xpu.lhl.dockerweb.vo.HostBasicInfoVO;
 
 import java.util.Map;
-import java.util.Properties;
 
 
 @Controller
 @RequestMapping("/physical")
 public class PhysicalController {
+    private final ProjectConfig projectConfig;
+    private final MonitorService monitorService;
+
+    public PhysicalController(ProjectConfig projectConfig,
+                              MonitorService monitorService) {
+        this.projectConfig = projectConfig;
+        this.monitorService = monitorService;
+    }
 
     //宿主机基本信息页面
     @RequestMapping("index")
@@ -40,7 +49,9 @@ public class PhysicalController {
 
     //宿主机内存信息页面
     @RequestMapping("memory")
-    public ModelAndView memoryInfo(){
-        return new ModelAndView("physical/memory");
+    public ModelAndView memoryInfo(Map<String, String> map){
+        monitorService.startSendMemoryMessage();
+        map.put("projectUrl", projectConfig.getUrl());
+        return new ModelAndView("physical/memory", map);
     }
 }

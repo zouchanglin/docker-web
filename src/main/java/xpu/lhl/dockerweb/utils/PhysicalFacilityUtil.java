@@ -47,6 +47,20 @@ public class PhysicalFacilityUtil {
         return new DecimalFormat("#.#").format(((omb.getTotalPhysicalMemorySize() - omb.getFreePhysicalMemorySize()) / 1024.0 / 1024 / 1024));
     }
 
+    /** 可用交换区内存 G为单位 */
+    public static String getFreeSwapSpaceMemory(){
+        OperatingSystemMXBean omb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+        // 可用交换区内存
+        return new DecimalFormat("#.#").format((omb.getFreeSwapSpaceSize() / 1024.0 / 1024 / 1024));
+    }
+
+    /** 已提交的交换区内存 G为单位 */
+    public static String getCommittedVirtualMemory(){
+        OperatingSystemMXBean omb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+        // 可用交换区内存
+        return new DecimalFormat("#.#").format((omb.getCommittedVirtualMemorySize() / 1024.0 / 1024 / 1024));
+    }
+
     /** [CPU系统使用率，CPU用户使用率，CPU当前等待率，CPU当前空闲率，CPU平均负载] */
     public static String[] getAllCPUInfo(){
         SystemInfo systemInfo = new SystemInfo();

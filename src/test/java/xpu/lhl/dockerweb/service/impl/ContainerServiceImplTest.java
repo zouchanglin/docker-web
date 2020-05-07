@@ -9,7 +9,7 @@ import xpu.lhl.dockerweb.service.ContainerService;
 
 import static org.junit.Assert.*;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringRunner.class)
 public class ContainerServiceImplTest {
     @Autowired

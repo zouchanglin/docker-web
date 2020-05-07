@@ -10,7 +10,7 @@ import xpu.lhl.dockerweb.entity.ContainerInfo;
 import static org.junit.Assert.*;
 
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringRunner.class)
 public class ContainerInfoRepositoryTest {
 
