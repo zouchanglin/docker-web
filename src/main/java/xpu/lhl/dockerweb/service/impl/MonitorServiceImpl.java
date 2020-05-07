@@ -35,15 +35,23 @@ public class MonitorServiceImpl implements MonitorService {
             CopyOnWriteArrayList<MemoryWebSocket> socketSet = MemoryWebSocket.webSocketSet;
 
             while (!socketSet.isEmpty()){
-                String used = PhysicalFacilityUtil.getUsedPhysicalMemory();
-                String free = PhysicalFacilityUtil.getFreePhysicalMemory();
-                String usedSwap = PhysicalFacilityUtil.getCommittedVirtualMemory();
-                String freeSwap = PhysicalFacilityUtil.getFreeSwapSpaceMemory();
+                double used = PhysicalFacilityUtil.getUsedPhysicalMemory();
+                double free = PhysicalFacilityUtil.getFreePhysicalMemory();
+                double total = PhysicalFacilityUtil.getTotalPhysicalMemory();
 
-                memoryVO.update(used, free, freeSwap, usedSwap);
-                memoryVO.setFreeNow(free);
-                memoryVO.setUsedNow(used);
-                memoryVO.setTotal(PhysicalFacilityUtil.getTotalPhysicalMemory());
+                double usedSwap = PhysicalFacilityUtil.getCommittedVirtualMemory();
+                double freeSwap = PhysicalFacilityUtil.getFreeSwapSpaceMemory();
+                double totalSwap = PhysicalFacilityUtil.getTotalSwapMemory();
+
+                String newUsed = String.format("%.2f", used/total);
+                String newFree = String.format("%.2f", free/total);
+                String newFreeSwap = String.format("%.2f", freeSwap/totalSwap);
+                String newUsedSwap = String.format("%.2f", usedSwap/totalSwap);
+
+                memoryVO.update(newUsed, newFree, newFreeSwap, newUsedSwap);
+                memoryVO.setFreeNow(String.format("%.2f", free));
+                memoryVO.setUsedNow(String.format("%.2f", used));
+                memoryVO.setTotal(String.format("%.2f", total));
 
                 memoryWebSocket.sendTextMessage(JSONObject.toJSONString(memoryVO));
                 try {

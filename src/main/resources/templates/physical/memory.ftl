@@ -12,9 +12,8 @@
 <div class="container">
     <#--边栏sidebar-->
     <#include "../common/nav.ftl">
-    <h3>宿主机内存信息</h3>
     <div class="row clearfix" id="row">
-        <div class="col-md-9 column">
+        <div class="col-md-10 column" style="padding-left: 50px">
             <div class="progress progress-striped active">
                 <div id="memory_load_progress" class="progress-bar progress-bar-success" role="progressbar"
                      aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
@@ -22,11 +21,11 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3 column">
+        <div class="col-md-2 column">
             <span id="memory_load_msg"></span>
         </div>
     </div>
-    <div id="main" style="width: 1000px;height:600px;">
+    <div id="main" style="width: 1000px;height:500px;">
 
     </div>
 
@@ -34,65 +33,35 @@
         // 基于准备好的dom，初始化ECharts实例
         let myChart = echarts.init(document.getElementById('main'));
         option = {
-            legend: {},
+            xAxis: {
+                type: 'category',
+                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            legend: {
+                data: ['xx', 'yy']
+            },
             tooltip: {
-                trigger: 'axis',
-                showContent: false
+                trigger: 'axis'
             },
-            dataset: {
-                source: [
-                    ['product', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019'],
-                    ['Matcha Latte', '41.1', '30.4', '65.1', 53.3, 83.8, 98.7, 53.3, 15.8],
-                    ['Milk2 Tea1', 86.5, 92.1, 85.7, 83.1, 73.4, 55.1, 63.3, 12.9],
-                    ['Milk3 Tea2', 86.5, 92.1, 85.7, 83.1, 73.4, 55.1, 63.3, 12.9],
-                    ['Milk4 Tea3', 86.5, 92.1, 85.7, 83.1, 73.4, 55.1, 63.3, 12.9],
-                ]
-            },
-            xAxis: {type: 'category'},
-            yAxis: {gridIndex: 0},
-            grid: {top: '55%'},
             series: [
-                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
                 {
-                    type: 'pie',
-                    id: 'pie',
-                    radius: '30%',
-                    center: ['50%', '25%'],
-                    label: {
-                        formatter: '{b}: {@2012} ({d}%)'
-                    },
-                    encode: {
-                        itemName: 'product',
-                        value: '2012',
-                        tooltip: '2012'
-                    }
+                    data: [80, 92, 90, 34, 29, 13, 92],
+                    type: 'line',
+                    name: 'xx',
+                    smooth: true
+                },
+                {
+                    data: [90, 22, 87, 24, 29, 13, 42],
+                    type: 'line',
+                    name: 'yy',
+                    smooth: true
                 }
             ]
         };
-
-        myChart.on('updateAxisPointer', function (event) {
-            var xAxisInfo = event.axesInfo[0];
-            if (xAxisInfo) {
-                var dimension = xAxisInfo.value + 1;
-                myChart.setOption({
-                    series: {
-                        id: 'pie',
-                        label: {
-                            formatter: '{b}: {@[' + dimension + ']} ({d}%)'
-                        },
-                        encode: {
-                            value: dimension,
-                            tooltip: dimension
-                        }
-                    }
-                });
-            }
-        });
-
-        // 使用刚指定的配置项和数据显示图表。
+        // 使用刚指定的配置项和数据显示图表
         myChart.setOption(option);
     </script>
 </div>
@@ -124,6 +93,50 @@
         document.getElementById('memory_load_progress').style = 'width: '+ ratio + '%';
         document.getElementById('memory_load_msg').innerText = ratio + '% 已使用';
 
+        //绘制图表
+        option = {
+            xAxis: {
+                type: 'category',
+                data: memoryData.time
+            },
+            yAxis: {
+                type: 'value'
+            },
+            legend: {
+                data: ['可用内存', '已用内存', '可用交换内存', '已用交换内存']
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            series: [
+                {
+                    data: memoryData.used,
+                    type: 'line',
+                    name: '已用内存',
+                    smooth: true
+                },
+                {
+                    data: memoryData.free,
+                    type: 'line',
+                    name: '可用内存',
+                    smooth: true
+                },
+                {
+                    data: memoryData.freeSwap,
+                    type: 'line',
+                    name: '可用交换内存',
+                    smooth: true
+                },
+                {
+                    data: memoryData.usedSwap,
+                    type: 'line',
+                    name: '已用交换内存',
+                    smooth: true
+                }
+            ]
+        };
+        // 使用刚指定的配置项和数据显示图表
+        myChart.setOption(option);
     };
 </script>
 </body>

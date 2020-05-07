@@ -187,15 +187,24 @@ public class ContainerServiceImpl implements ContainerService {
     private ContainerConfig generate(CreateContainerForm createContainerForm) {
         Integer containerPort = createContainerForm.getContainerPort();
         Integer hostPort = createContainerForm.getHostPort();
-        Map<String, List<PortBinding>> portBindings = new HashMap<>();
-        portBindings.put(String.valueOf(containerPort), Collections.singletonList(PortBinding.of("0.0.0.0", String.valueOf(hostPort))));
+
+        Map<String, List<PortBinding>> portBindings = null;
+        if(!(containerPort == null || hostPort == null)){
+            portBindings = new HashMap<>();
+            portBindings.put(String.valueOf(containerPort),
+                    Collections.singletonList(PortBinding.of("0.0.0.0", String.valueOf(hostPort))));
+        }
 
         HostConfig hostConfig = HostConfig.builder()
-                .portBindings(portBindings)
                 .cpuShares(CPUSharesEnum.A.getValue())
-                .memory((long)(createContainerForm.getMemorySize() * 1024 * 1024 * 1024))
+                //.memory((long)(createContainerForm.getMemorySize() * 1024 * 1024 * 1024))
                 .privileged(true)
                 .build();
+
+        // 判断是否存在端口映射
+        if(portBindings != null) {
+            hostConfig = hostConfig.toBuilder().portBindings(portBindings).build();
+        }
 
         // 判断是否存在容器数据卷
         String containerPath = createContainerForm.getContainerPath();

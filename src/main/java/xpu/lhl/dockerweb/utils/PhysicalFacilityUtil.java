@@ -27,38 +27,44 @@ public class PhysicalFacilityUtil {
     }
 
     /** 总内存 G为单位 */
-    public static String getTotalPhysicalMemory(){
+    public static double getTotalPhysicalMemory(){
         OperatingSystemMXBean omb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
         // 总的物理内存
-        return new DecimalFormat("#.#").format(omb.getTotalPhysicalMemorySize() / 1024.0 / 1024 / 1024);
+        return omb.getTotalPhysicalMemorySize() / 1024.0 / 1024 / 1024;
     }
 
     /** 可用内存 G为单位 */
-    public static String getFreePhysicalMemory(){
+    public static double getFreePhysicalMemory(){
         OperatingSystemMXBean omb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
         // 总的物理内存
-        return new DecimalFormat("#.#").format(omb.getFreePhysicalMemorySize() / 1024.0 / 1024 / 1024);
+        return omb.getFreePhysicalMemorySize() / 1024.0 / 1024 / 1024;
     }
 
     /** 已使用内存 G为单位 */
-    public static String getUsedPhysicalMemory(){
+    public static double getUsedPhysicalMemory(){
         OperatingSystemMXBean omb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
         // 总的物理内存
-        return new DecimalFormat("#.#").format(((omb.getTotalPhysicalMemorySize() - omb.getFreePhysicalMemorySize()) / 1024.0 / 1024 / 1024));
+        return (omb.getTotalPhysicalMemorySize() - omb.getFreePhysicalMemorySize()) / 1024.0 / 1024 / 1024;
     }
 
     /** 可用交换区内存 G为单位 */
-    public static String getFreeSwapSpaceMemory(){
+    public static double getFreeSwapSpaceMemory(){
         OperatingSystemMXBean omb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
         // 可用交换区内存
-        return new DecimalFormat("#.#").format((omb.getFreeSwapSpaceSize() / 1024.0 / 1024 / 1024));
+        return omb.getFreeSwapSpaceSize() / 1024.0 / 1024 / 1024;
     }
 
     /** 已提交的交换区内存 G为单位 */
-    public static String getCommittedVirtualMemory(){
+    public static double getCommittedVirtualMemory(){
         OperatingSystemMXBean omb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
         // 可用交换区内存
-        return new DecimalFormat("#.#").format((omb.getCommittedVirtualMemorySize() / 1024.0 / 1024 / 1024));
+        return omb.getCommittedVirtualMemorySize() / 1024.0 / 1024 / 1024;
+    }
+
+    public static double getTotalSwapMemory(){
+        OperatingSystemMXBean omb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+        // 总交换区内存
+        return omb.getTotalSwapSpaceSize() / 1024.0 / 1024 / 1024;
     }
 
     /** [CPU系统使用率，CPU用户使用率，CPU当前等待率，CPU当前空闲率，CPU平均负载] */

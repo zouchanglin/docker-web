@@ -9,7 +9,7 @@ public class CreateContainerForm {
     private String hostPath;
     private String containerPath;
     private Integer diskSize; // G
-    private float memorySize; // G
+    //private Float memorySize; // G
     private Integer cpuShare;// 0 1 2 3 4
     private String envK;
     private String envV;

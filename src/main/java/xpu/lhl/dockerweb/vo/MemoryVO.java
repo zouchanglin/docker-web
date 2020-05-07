@@ -12,6 +12,7 @@ public class MemoryVO {
     private String[] free;
     private String[] freeSwap;
     private String[] usedSwap;
+
     private int length;
     private String usedNow;
     private String freeNow;
