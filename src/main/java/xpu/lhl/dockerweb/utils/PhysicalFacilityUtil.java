@@ -96,11 +96,11 @@ public class PhysicalFacilityUtil {
                 - prevTicks[CentralProcessor.TickType.IDLE.getIndex()];
         long totalCpu = user + nice + cSys + idle + iowait + irq + softirq + steal;
         String[] strings = new String[5];
-        strings[0] = new DecimalFormat("#.##%").format((cSys>0? cSys:1) * 1.0 / totalCpu);
-        strings[1] = new DecimalFormat("#.##%").format(user * 1.0 / totalCpu);
-        strings[2] = new DecimalFormat("#.##%").format(iowait * 1.0 / totalCpu);
-        strings[3] = new DecimalFormat("#.##%").format(idle * 1.0 / totalCpu);
-        strings[4] = String.format("%.1f%%", processor.getSystemCpuLoadBetweenTicks() * 100);
+        strings[0] = new DecimalFormat("#.##").format((cSys>0? cSys:1) * 1.0 / totalCpu);
+        strings[1] = new DecimalFormat("#.##").format(user * 1.0 / totalCpu);
+        strings[2] = new DecimalFormat("#.##").format(iowait * 1.0 / totalCpu);
+        strings[3] = new DecimalFormat("#.##").format(idle * 1.0 / totalCpu);
+        strings[4] = String.format("%.1f", processor.getSystemCpuLoadBetweenTicks());
         return strings;
     }
 

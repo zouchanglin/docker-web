@@ -32,37 +32,9 @@
     <script type="text/javascript">
         // 基于准备好的dom，初始化ECharts实例
         let myChart = echarts.init(document.getElementById('main'));
-        option = {
-            xAxis: {
-                type: 'category',
-                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-            },
-            yAxis: {
-                type: 'value'
-            },
-            legend: {
-                data: ['xx', 'yy']
-            },
-            tooltip: {
-                trigger: 'axis'
-            },
-            series: [
-                {
-                    data: [80, 92, 90, 34, 29, 13, 92],
-                    type: 'line',
-                    name: 'xx',
-                    smooth: true
-                },
-                {
-                    data: [90, 22, 87, 24, 29, 13, 42],
-                    type: 'line',
-                    name: 'yy',
-                    smooth: true
-                }
-            ]
-        };
+
         // 使用刚指定的配置项和数据显示图表
-        myChart.setOption(option);
+        //myChart.setOption(option);
     </script>
 </div>
 <script>

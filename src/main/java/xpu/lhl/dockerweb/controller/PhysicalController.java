@@ -5,9 +5,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import xpu.lhl.dockerweb.config.ProjectConfig;
 import xpu.lhl.dockerweb.service.MonitorService;
+import xpu.lhl.dockerweb.utils.DiskFreeUtils;
 import xpu.lhl.dockerweb.utils.PhysicalFacilityUtil;
 import xpu.lhl.dockerweb.vo.HostBasicInfoVO;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 
@@ -37,13 +40,19 @@ public class PhysicalController {
 
     //宿主机磁盘信息页面
     @RequestMapping("disk")
-    public ModelAndView diskInfo(){
-        return new ModelAndView("physical/disk");
+    public ModelAndView diskInfo(Map<String, Object> map){
+        monitorService.startSendDiskMessage();
+        Map<String, String> diskInfo = DiskFreeUtils.getInfo();
+        map.put("diskInfo", diskInfo);
+        map.put("projectUrl", projectConfig.getUrl());
+        return new ModelAndView("physical/disk", map);
     }
 
     //宿主机CPU信息页面
     @RequestMapping("cpu")
-    public ModelAndView cpuInfo(){
+    public ModelAndView cpuInfo(Map<String, String> map){
+        monitorService.startSendCPUMessage();
+        map.put("projectUrl", projectConfig.getUrl());
         return new ModelAndView("physical/cpu");
     }
 

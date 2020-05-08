@@ -35,11 +35,11 @@
     </content>
     <orderEntry type="jdk" jdkName="1.8" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.2.4" level="project" />
     <orderEntry type="library" name="Maven: com.github.oshi:oshi-core:3.12.2" level="project" />
-    <orderEntry type="library" name="Maven: net.java.dev.jna:jna:4.5.2" level="project" />
-    <orderEntry type="library" name="Maven: net.java.dev.jna:jna-platform:4.5.2" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.30" level="project" />
+    <orderEntry type="library" name="Maven: net.java.dev.jna:jna:5.2.0" level="project" />
+    <orderEntry type="library" name="Maven: net.java.dev.jna:jna-platform:5.2.0" level="project" />
+    <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.2.4" level="project" />
     <orderEntry type="library" name="Maven: org.glassfish.jersey.inject:jersey-hk2:2.27" level="project" />
     <orderEntry type="library" name="Maven: org.glassfish.jersey.core:jersey-common:2.29.1" level="project" />
     <orderEntry type="library" name="Maven: jakarta.ws.rs:jakarta.ws.rs-api:2.1.6" level="project" />
