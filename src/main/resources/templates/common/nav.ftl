@@ -69,10 +69,13 @@
                         <a href="#">加速链接</a>
                     </li>
                     <li>
-                        <a href="#">用户中心</a>
+                        <a href="/setting/repository-page">用户中心</a>
                     </li>
                     <li>
-                        <a href="#">其它设置</a>
+                        <a href="/setting/docker-page">Docker IP</a>
+                    </li>
+                    <li>
+                        <a href="#">其他设置</a>
                     </li>
                 </ul>
             </li>

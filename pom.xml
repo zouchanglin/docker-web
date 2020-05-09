@@ -40,12 +40,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.4</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.oshi</groupId>
-            <artifactId>oshi-core</artifactId>
-            <version>3.12.2</version>
+            <version>1.2.68</version>
         </dependency>
         <!--系统使用率导包结束-->
         <dependency>
