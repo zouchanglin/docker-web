@@ -39,7 +39,7 @@ public class CPUWebSocket {
 
     public void sendTextMessage(String message){
         for(CPUWebSocket webSocket: webSocketSet) {
-            log.info("【WebSocket消息】广播消息：message={}", message);
+            // log.info("【WebSocket消息】广播消息：message={}", message);
             try {
                 webSocket.session.getBasicRemote().sendText(message);
             } catch (IOException e) {

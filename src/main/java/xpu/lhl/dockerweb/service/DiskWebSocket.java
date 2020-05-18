@@ -39,7 +39,7 @@ public class DiskWebSocket {
 
     public void sendTextMessage(String message){
         for(DiskWebSocket webSocket: webSocketSet) {
-            log.info("【WebSocket消息】广播消息：message={}", message);
+            // log.info("【WebSocket消息】广播消息：message={}", message);
             try {
                 webSocket.session.getBasicRemote().sendText(message);
             } catch (IOException e) {

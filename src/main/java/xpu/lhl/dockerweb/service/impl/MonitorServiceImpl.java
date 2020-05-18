@@ -115,9 +115,8 @@ public class MonitorServiceImpl implements MonitorService {
             while (!socketSet.isEmpty()){
                 String[] allCPUInfo = PhysicalFacilityUtil.getAllCPUInfo();
                 cpuvo.update(allCPUInfo[0], allCPUInfo[1], allCPUInfo[2], allCPUInfo[3], allCPUInfo[4]);
-                log.info("VO={}", cpuvo);
                 String toJSONString = JSONObject.toJSONString(cpuvo);
-                log.info("JSON={}", toJSONString);
+                // log.info("JSON={}", toJSONString);
                 cpuWebSocket.sendTextMessage(toJSONString);
                 try {
                     TimeUnit.MILLISECONDS.sleep(500);
