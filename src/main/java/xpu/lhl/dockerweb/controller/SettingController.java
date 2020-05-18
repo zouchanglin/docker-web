@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import xpu.lhl.dockerweb.config.DockerConfig;
+import xpu.lhl.dockerweb.config.ProjectConfig;
 import xpu.lhl.dockerweb.config.RepositoryConfig;
 import xpu.lhl.dockerweb.form.DockerIPFrom;
 import xpu.lhl.dockerweb.form.RepositoryForm;
@@ -18,18 +19,21 @@ import java.util.Map;
 @Controller
 @RequestMapping("/setting")
 public class SettingController {
+
     private final RepositoryConfig repositoryConfig;
     private final DockerConfig dockerConfig;
+    private final ProjectConfig projectConfig;
     private final DockerVersionService dockerVersionService;
-
 
     @Autowired
     public SettingController(RepositoryConfig repositoryConfig,
                              DockerConfig dockerConfig,
-                             DockerVersionService dockerVersionService) {
+                             DockerVersionService dockerVersionService,
+                             ProjectConfig projectConfig) {
         this.repositoryConfig = repositoryConfig;
         this.dockerConfig = dockerConfig;
         this.dockerVersionService = dockerVersionService;
+        this.projectConfig = projectConfig;
     }
 
     @GetMapping("docker-version")
@@ -72,6 +76,9 @@ public class SettingController {
 
         dockerConfig.setDockerIp(dockerIPFrom.getDockerIp());
         dockerConfig.setDockerPort(dockerIPFrom.getDockerPort());
+
+        // 修改管理系统的URL，方便WebSocket连接
+        projectConfig.setUrl(dockerIPFrom.getDockerIp() + ":8080");
 
         map.put("msg", "修改配置成功");
         map.put("url", "/physical/index");

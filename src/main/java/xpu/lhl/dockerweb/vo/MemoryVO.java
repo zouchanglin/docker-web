@@ -5,6 +5,9 @@ import xpu.lhl.dockerweb.utils.MyDateFormat;
 
 import java.util.Date;
 
+/**
+ * 内存信息视图对象(这是一个数据组)
+ */
 @Data
 public class MemoryVO {
     private String[] time;

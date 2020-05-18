@@ -2,6 +2,9 @@ package xpu.lhl.dockerweb.vo;
 
 import lombok.Data;
 
+/**
+ * 容器信息视图对象
+ */
 @Data
 public class ContainerVO {
     private String containerId;

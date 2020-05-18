@@ -2,6 +2,9 @@ package xpu.lhl.dockerweb.vo;
 
 import lombok.Data;
 
+/**
+ * 宿主机信息视图对象、以及管理系统所处的Java环境
+ */
 @Data
 public class HostBasicInfoVO {
     private String osName;

@@ -1,4 +1,3 @@
-<#--<nav class="navbar navbar-default" role="navigation">-->
 <nav class="navbar navbar-default navbar-static-top" role="navigation">
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
@@ -34,7 +33,7 @@
                         <a href="/images/search-page">搜索镜像</a>
                     </li>
                     <li>
-                        <a href="/images/build-page">DockerFile-Build</a>
+                        <a href="/images/build-page">DockerFile</a>
                     </li>
                 </ul>
             </li>
@@ -75,7 +74,7 @@
                         <a href="/setting/repository-page">用户中心</a>
                     </li>
                     <li>
-                        <a href="/setting/docker-page">Docker IP</a>
+                        <a href="/setting/docker-page">Docker-IP</a>
                     </li>
                     <li>
                         <a href="#">其他设置</a>
@@ -83,11 +82,16 @@
                 </ul>
             </li>
         </ul>
-        <form class="navbar-form navbar-left" role="search">
-            <div class="form-group">
-                <input type="text" class="form-control" />
-            </div> <button type="submit" class="btn btn-default">Search</button>
-        </form>
+        <ul class="nav navbar-nav navbar-left">
+            <li>
+                <a href="/applications/list">应用市场</a>
+            </li>
+        </ul>
+<#--        <form class="navbar-form navbar-left" role="search">-->
+<#--            <div class="form-group">-->
+<#--                <input type="text" class="form-control" />-->
+<#--            </div> <button type="submit" class="btn btn-default">Search</button>-->
+<#--        </form>-->
         <ul class="nav navbar-nav navbar-right">
 
         </ul>

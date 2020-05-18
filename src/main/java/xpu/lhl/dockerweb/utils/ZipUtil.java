@@ -7,7 +7,7 @@ import java.util.zip.*;
 
 /**
  * java.util.zip压缩/解压文件
- * */
+ */
 public class ZipUtil {
 
     /** 缓冲器大小 */
@@ -57,7 +57,7 @@ public class ZipUtil {
                 break;
             }
             else {
-                relativePath=file.getName()+"/"+relativePath;
+                relativePath = file.getName() + "/" + relativePath;
             }
         }
         return relativePath;
