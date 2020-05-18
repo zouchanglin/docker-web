@@ -30,31 +30,31 @@
                 <div class="form-group">
                     <label for="inputPassword3" class="col-sm-2 control-label">仓库地址</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" placeholder="registry.cn-hangzhou.aliyuncs.com" id="inputPassword3" name="serverAddress"/>
+                        <input type="text" class="form-control" value="${repositoryConfig.serverAddress}" id="inputPassword3" name="serverAddress"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">用户名称</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="inputEmail3" name="userName"/>
+                        <input type="text" class="form-control" value="${repositoryConfig.userName}" id="inputEmail3" name="userName"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail1" class="col-sm-2 control-label">用户密码</label>
                     <div class="col-sm-5">
-                        <input type="password" class="form-control" id="inputEmail1" name="password"/>
+                        <input type="password" class="form-control" value="${repositoryConfig.password}" id="inputEmail1" name="password"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail1" class="col-sm-2 control-label">邮件地址</label>
                     <div class="col-sm-5">
-                        <input type="email" class="form-control" id="inputEmail1" name="email"/>
+                        <input type="email" class="form-control" value="${repositoryConfig.email}" id="inputEmail1" name="email"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail1" class="col-sm-2 control-label">命名空间</label>
                     <div class="col-sm-5">
-                        <input type="text" class="form-control" id="inputEmail1" name="namespace"/>
+                        <input type="text" class="form-control" value="${repositoryConfig.namespace}" id="inputEmail1" name="namespace"/>
                     </div>
                 </div>
                 <div class="form-group">

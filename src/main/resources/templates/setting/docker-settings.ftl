@@ -30,13 +30,13 @@
                 <div class="form-group">
                     <label for="inputPassword3" class="col-sm-2 control-label">服务IP</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" placeholder="192.168.2.2" id="inputPassword3" name="dockerIp"/>
+                        <input type="text" class="form-control" value="${dockerConfig.dockerIp}" id="inputPassword3" name="dockerIp"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">服务端口</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="inputEmail3" name="dockerPort"/>
+                        <input type="number" class="form-control" value="${dockerConfig.dockerPort?c}" id="inputEmail3" name="dockerPort"/>
                     </div>
                 </div>
 

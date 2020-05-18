@@ -38,7 +38,7 @@ repository:
   namespace: zouchanglin
 
 docker:
-  docker-ip: 192.168.2.2
+  docker-ip: 127.0.0.1
   docker-port: 2375
 project:
   url: localhost:8080

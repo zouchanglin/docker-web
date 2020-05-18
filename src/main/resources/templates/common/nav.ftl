@@ -69,6 +69,9 @@
                         <a href="#">加速链接</a>
                     </li>
                     <li>
+                        <a href="/setting/docker-version">版本信息</a>
+                    </li>
+                    <li>
                         <a href="/setting/repository-page">用户中心</a>
                     </li>
                     <li>

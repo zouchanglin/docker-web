@@ -10,26 +10,45 @@ import xpu.lhl.dockerweb.config.DockerConfig;
 import xpu.lhl.dockerweb.config.RepositoryConfig;
 import xpu.lhl.dockerweb.form.DockerIPFrom;
 import xpu.lhl.dockerweb.form.RepositoryForm;
+import xpu.lhl.dockerweb.service.DockerVersionService;
+import xpu.lhl.dockerweb.vo.DockerVersionVO;
 
 import java.util.Map;
 
 @Controller
 @RequestMapping("/setting")
 public class SettingController {
-    @Autowired
-    private RepositoryConfig repositoryConfig;
+    private final RepositoryConfig repositoryConfig;
+    private final DockerConfig dockerConfig;
+    private final DockerVersionService dockerVersionService;
+
 
     @Autowired
-    private DockerConfig dockerConfig;
+    public SettingController(RepositoryConfig repositoryConfig,
+                             DockerConfig dockerConfig,
+                             DockerVersionService dockerVersionService) {
+        this.repositoryConfig = repositoryConfig;
+        this.dockerConfig = dockerConfig;
+        this.dockerVersionService = dockerVersionService;
+    }
+
+    @GetMapping("docker-version")
+    public ModelAndView getDockerVersion(Map<String, Object> map){
+        DockerVersionVO dockerVersion = dockerVersionService.getDockerVersion();
+        map.put("dockerVersion", dockerVersion);
+        return new ModelAndView("setting/docker-version", map);
+    }
 
     @GetMapping("repository-page")
-    public ModelAndView getRepositorySettingPage(){
-        return new ModelAndView("setting/user-settings");
+    public ModelAndView getRepositorySettingPage(Map<String, Object> map){
+        map.put("repositoryConfig", repositoryConfig);
+        return new ModelAndView("setting/user-settings", map);
     }
 
     @GetMapping("docker-page")
-    public ModelAndView getDockerSettingPage(){
-        return new ModelAndView("setting/docker-settings");
+    public ModelAndView getDockerSettingPage(Map<String, Object> map){
+        map.put("dockerConfig", dockerConfig);
+        return new ModelAndView("setting/docker-settings", map);
     }
 
     @PostMapping("repository")
