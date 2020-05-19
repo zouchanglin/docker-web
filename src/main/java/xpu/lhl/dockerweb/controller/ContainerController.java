@@ -102,7 +102,7 @@ public class ContainerController {
     @PostMapping("create")
     public ModelAndView createContainer(CreateContainerForm createContainerForm,
                                         Map<String, String> map){
-        log.info("【ContainerController】createContainer createContainerForm = {}", createContainerForm);
+        // log.info("【ContainerController】createContainer createContainerForm = {}", createContainerForm);
         String containerId = containerService.createContainer(createContainerForm);
         map.put("url", "/container/status/create");
         if(containerId != null){
@@ -110,6 +110,21 @@ public class ContainerController {
             return new ModelAndView("common/success");
         }else{
             map.put("msg", "创建容器失败");
+            return new ModelAndView("common/error");
+        }
+    }
+
+    @PostMapping("create-and-run")
+    public ModelAndView createAndRunContainer(CreateContainerForm createContainerForm,
+                                        Map<String, String> map){
+        String containerId = containerService.createContainer(createContainerForm);
+        containerService.startContainer(containerId);
+        map.put("url", "/container/status/running");
+        if(containerService.startContainer(containerId)){
+            map.put("msg", "Start this container success!");
+            return new ModelAndView("common/success");
+        }else{
+            map.put("msg", "Start this container failed!");
             return new ModelAndView("common/error");
         }
     }
