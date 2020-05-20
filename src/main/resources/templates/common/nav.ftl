@@ -9,8 +9,12 @@
             <li class="dropdown">
                 <a href="#" disabled="true" class="dropdown-toggle" data-toggle="dropdown">物理机监控<strong class="caret"></strong></a>
                 <ul class="dropdown-menu">
+
                     <li>
-                        <a href="/physical/index">基本信息</a>
+                        <div style="padding-left: 10px">
+                            <i class="fa fa-refresh fa-spin"></i>
+                            <a href="/physical/index">基本信息</a>
+                        </div>
                     </li>
                     <li>
                         <a href="/physical/disk">磁盘监控</a>
@@ -87,13 +91,10 @@
                 <a href="/applications/list">应用市场</a>
             </li>
         </ul>
-<#--        <form class="navbar-form navbar-left" role="search">-->
-<#--            <div class="form-group">-->
-<#--                <input type="text" class="form-control" />-->
-<#--            </div> <button type="submit" class="btn btn-default">Search</button>-->
-<#--        </form>-->
         <ul class="nav navbar-nav navbar-right">
-
+            <li>
+                <a href="/logout">登出</a>
+            </li>
         </ul>
     </div>
 </nav>

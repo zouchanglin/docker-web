@@ -9,7 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 import xpu.lhl.dockerweb.config.DockerConfig;
 import xpu.lhl.dockerweb.config.ProjectConfig;
 import xpu.lhl.dockerweb.config.RepositoryConfig;
-import xpu.lhl.dockerweb.form.DockerIPFrom;
+import xpu.lhl.dockerweb.form.DockerIPForm;
 import xpu.lhl.dockerweb.form.RepositoryForm;
 import xpu.lhl.dockerweb.service.DockerVersionService;
 import xpu.lhl.dockerweb.vo.DockerVersionVO;
@@ -71,14 +71,14 @@ public class SettingController {
     }
 
     @PostMapping("docker")
-    public ModelAndView saveDockerIPAndPort(DockerIPFrom dockerIPFrom,
+    public ModelAndView saveDockerIPAndPort(DockerIPForm dockerIPForm,
                                             Map<String, String> map){
 
-        dockerConfig.setDockerIp(dockerIPFrom.getDockerIp());
-        dockerConfig.setDockerPort(dockerIPFrom.getDockerPort());
+        dockerConfig.setDockerIp(dockerIPForm.getDockerIp());
+        dockerConfig.setDockerPort(dockerIPForm.getDockerPort());
 
         // 修改管理系统的URL，方便WebSocket连接
-        projectConfig.setUrl(dockerIPFrom.getDockerIp() + ":8080");
+        projectConfig.setUrl(dockerIPForm.getDockerIp() + ":8080");
 
         map.put("msg", "修改配置成功");
         map.put("url", "/physical/index");

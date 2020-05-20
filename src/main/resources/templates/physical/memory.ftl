@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>宿主机内存信息</title>
     <link href="/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
     <script type="text/javascript" src="/js/jquery.min.js"></script>
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/js/echarts.min.js"></script>
@@ -12,6 +13,7 @@
 <div class="container">
     <#--边栏sidebar-->
     <#include "../common/nav.ftl">
+    <h4>>宿主机内存信息</h4>
     <div class="row clearfix" id="row">
         <div class="col-md-10 column" style="padding-left: 50px">
             <div class="progress progress-striped active">

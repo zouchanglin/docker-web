@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>宿主机</title>
     <link href="/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
     <script type="text/javascript" src="/js/jquery.min.js"></script>
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
 </head>
@@ -11,7 +12,7 @@
 <div class="container">
     <#--边栏sidebar-->
     <#include "../common/nav.ftl">
-    <h1>宿主机基本信息</h1>
+    <h4>> 宿主机基本信息</h4>
     <table class="table table-bordered">
         <tbody>
         <tr>

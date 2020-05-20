@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 @Data
-public class DockerIPFrom {
+public class DockerIPForm {
     private String dockerIp;
     private Integer dockerPort;
 }
