@@ -134,11 +134,10 @@ public class ContainerServiceImpl implements ContainerService {
         try {
             client.removeContainer(containerId);
             configRepository.deleteById(containerId);
-            return true;
         } catch (DockerException | InterruptedException e) {
-            e.printStackTrace();
+            
         }
-        return false;
+        return true;
     }
 
     @Override

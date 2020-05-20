@@ -21,4 +21,9 @@ public class AppStoreServiceImpl implements AppStoreService {
         ApplicationNameEnum applicationNameEnum = AppEnumUtil.getByName(appName);
         imagesService.pullImage(applicationNameEnum.getAppImageName());
     }
+
+    @Override
+    public void doNothing() {
+
+    }
 }

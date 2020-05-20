@@ -32,6 +32,7 @@ public class AppStoreController {
         ApplicationNameEnum applicationNameEnum = AppEnumUtil.getByName(app);
         map.put("imageId", applicationNameEnum.getAppImageName());
         map.put("appName", applicationNameEnum.getAppName());
+        appStoreService.doNothing();
         return new ModelAndView("app-store/create");
     }
 }

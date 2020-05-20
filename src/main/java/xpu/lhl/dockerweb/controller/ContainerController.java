@@ -20,8 +20,12 @@ import java.util.Map;
 @Controller
 @RequestMapping("/container")
 public class ContainerController {
+    private final ContainerService containerService;
+
     @Autowired
-    private ContainerService containerService;
+    public ContainerController(ContainerService containerService) {
+        this.containerService = containerService;
+    }
 
     @GetMapping("/list")
     public ModelAndView listContainer(Map<String, Object> map){

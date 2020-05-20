@@ -25,8 +25,12 @@ import java.util.Map;
 @Controller
 @RequestMapping("/images")
 public class ImageController {
+    private final ImagesService imagesService;
+
     @Autowired
-    private ImagesService imagesService;
+    public ImageController(ImagesService imagesService) {
+        this.imagesService = imagesService;
+    }
 
     // 获得本地镜像列表
     @GetMapping("list")

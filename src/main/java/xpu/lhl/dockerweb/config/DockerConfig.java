@@ -10,6 +10,13 @@ import org.springframework.stereotype.Component;
 @Configuration
 @ConfigurationProperties(prefix = "docker")
 public class DockerConfig {
+    /**
+     * Docker引擎IP
+     */
     private String dockerIp;
+
+    /**
+     * Docker引擎Port
+     */
     private Integer dockerPort;
 }
