@@ -30,11 +30,16 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class ImagesServiceImpl implements ImagesService {
-    @Autowired
-    private DockerOperation dockerOperation;
+    private final DockerOperation dockerOperation;
+
+    private final RepositoryConfig repositoryConfig;
 
     @Autowired
-    private RepositoryConfig repositoryConfig;
+    public ImagesServiceImpl(DockerOperation dockerOperation,
+                             RepositoryConfig repositoryConfig) {
+        this.dockerOperation = dockerOperation;
+        this.repositoryConfig = repositoryConfig;
+    }
 
     @Override
     public List<ImageVO> getAllImages() {

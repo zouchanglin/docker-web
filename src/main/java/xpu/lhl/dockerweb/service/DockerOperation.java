@@ -4,6 +4,7 @@ import com.spotify.docker.client.DefaultDockerClient;
 import com.spotify.docker.client.DockerClient;
 import com.spotify.docker.client.messages.RegistryAuth;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import xpu.lhl.dockerweb.config.DockerConfig;
@@ -17,7 +18,9 @@ public class DockerOperation {
     private final RepositoryConfig repositoryConfig;
     private final DockerConfig dockerConfig;
 
-    public DockerOperation(RepositoryConfig repositoryConfig, DockerConfig dockerConfig) {
+    @Autowired
+    public DockerOperation(RepositoryConfig repositoryConfig,
+                           DockerConfig dockerConfig) {
         this.repositoryConfig = repositoryConfig;
         this.dockerConfig = dockerConfig;
     }
