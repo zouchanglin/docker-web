@@ -13,7 +13,7 @@
 <div class="container">
     <#--边栏sidebar-->
     <#include "../common/nav.ftl">
-    <h4>>宿主机磁盘信息</h4>
+    <h4>宿主机磁盘信息</h4>
     <div id="main" style="width: 1000px;height:500px;">
 
     </div>

@@ -41,6 +41,19 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">系统IP</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" value="${dockerConfig.dockerIp}" id="inputPassword3" name="systemIp"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">系统端口</label>
+                    <div class="col-sm-10">
+                        <input type="number" class="form-control" value="8080" id="inputEmail3" name="systemPort"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <button type="submit" class="btn btn-default">修改为此IP</button>
                     </div>

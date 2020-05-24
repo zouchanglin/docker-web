@@ -11,10 +11,15 @@
 <div class="container">
     <#--边栏sidebar-->
     <#include "../../common/nav.ftl">
-    <h1>Commit This Container</h1>
     <div class="row clearfix">
         <div class="col-md-12 column">
             <form class="form-horizontal" style="padding-right: 110px" role="form" action="/container/commit" method="post">
+                <div class="form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label"></label>
+                    <div class="col-sm-10">
+                        <h4>提交容器 ${containerName}</h4>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label for="inputPassword3" class="col-sm-2 control-label">容器</label>
                     <div class="col-sm-10">

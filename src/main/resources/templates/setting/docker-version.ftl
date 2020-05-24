@@ -11,7 +11,7 @@
 <div class="container">
     <#--边栏sidebar-->
     <#include "../common/nav.ftl">
-    <h1>Docker引擎信息</h1>
+    <h4>Docker引擎信息</h4>
     <table class="table table-bordered">
         <tbody>
         <tr>

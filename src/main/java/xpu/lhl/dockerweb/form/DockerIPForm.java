@@ -9,4 +9,7 @@ import org.springframework.stereotype.Component;
 public class DockerIPForm {
     private String dockerIp;
     private Integer dockerPort;
+
+    private String systemIp;
+    private String systemPort;
 }

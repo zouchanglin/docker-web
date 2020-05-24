@@ -52,6 +52,7 @@ public class SettingController {
     @GetMapping("docker-page")
     public ModelAndView getDockerSettingPage(Map<String, Object> map){
         map.put("dockerConfig", dockerConfig);
+        map.put("projectConfig", projectConfig);
         return new ModelAndView("setting/docker-settings", map);
     }
 
@@ -78,7 +79,8 @@ public class SettingController {
         dockerConfig.setDockerPort(dockerIPForm.getDockerPort());
 
         // 修改管理系统的URL，方便WebSocket连接
-        projectConfig.setUrl(dockerIPForm.getDockerIp() + ":8080");
+        // projectConfig.setUrl(dockerIPForm.getDockerIp() + ":8080");
+        projectConfig.setUrl(dockerIPForm.getSystemIp() + ":" + dockerIPForm.getSystemPort());
 
         map.put("msg", "修改配置成功");
         map.put("url", "/physical/index");

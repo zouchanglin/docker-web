@@ -13,7 +13,7 @@
 <div class="container">
     <#--边栏sidebar-->
     <#include "../common/nav.ftl">
-    <h4>>宿主机内存信息</h4>
+    <h4>宿主机内存信息</h4>
     <div class="row clearfix" id="row">
         <div class="col-md-10 column" style="padding-left: 50px">
             <div class="progress progress-striped active">

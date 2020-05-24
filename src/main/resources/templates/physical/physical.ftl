@@ -12,7 +12,7 @@
 <div class="container">
     <#--边栏sidebar-->
     <#include "../common/nav.ftl">
-    <h4>> 宿主机基本信息</h4>
+    <h4>宿主机基本信息</h4>
     <table class="table table-bordered">
         <tbody>
         <tr>

@@ -11,10 +11,7 @@
                 <ul class="dropdown-menu">
 
                     <li>
-                        <div style="padding-left: 10px">
-                            <i class="fa fa-refresh fa-spin"></i>
-                            <a href="/physical/index">基本信息</a>
-                        </div>
+                        <a href="/physical/index">基本信息</a>
                     </li>
                     <li>
                         <a href="/physical/disk">磁盘监控</a>
