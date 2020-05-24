@@ -255,17 +255,27 @@ public class ContainerServiceImpl implements ContainerService {
     public Map<String, String> getRepositoryInfo(String containerId) {
         HashMap<String, String> retHashMap = new HashMap<>();
         Optional<xpu.lhl.dockerweb.entity.ContainerConfig> configOptional = configRepository.findById(containerId);
+        String containerName = null;
         if(configOptional.isPresent()){
             xpu.lhl.dockerweb.entity.ContainerConfig containerConfig = configOptional.get();
-            String containerName = containerConfig.getContainerName();
-            String serverAddress = repositoryConfig.getServerAddress();
-            String namespace = repositoryConfig.getNamespace();
-            retHashMap.put("containerId", containerId);
-            retHashMap.put("containerName", containerName);
-            retHashMap.put("serverAddress", serverAddress);
-            retHashMap.put("namespace", namespace);
-            retHashMap.put("author", repositoryConfig.getUserName() + ":" + repositoryConfig.getEmail());
+            containerName = containerConfig.getContainerName();
+        }else{
+            DockerClient dockerClient = dockerOperation.getClient();
+            try {
+                ContainerInfo containerInfo = dockerClient.inspectContainer(containerId);
+                containerName = containerInfo.name();
+            } catch (DockerException | InterruptedException e) {
+                log.error("【Use docker client find container by Id error!】");
+            }
         }
+
+        String serverAddress = repositoryConfig.getServerAddress();
+        String namespace = repositoryConfig.getNamespace();
+        retHashMap.put("containerId", containerId);
+        retHashMap.put("containerName", containerName);
+        retHashMap.put("serverAddress", serverAddress);
+        retHashMap.put("namespace", namespace);
+        retHashMap.put("author", repositoryConfig.getUserName() + ":" + repositoryConfig.getEmail());
         return retHashMap;
     }
 
